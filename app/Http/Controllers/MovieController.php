@@ -5,8 +5,20 @@ use Cinema\Http\Requests;
 use Cinema\Http\Controllers\Controller;
 use Cinema\Genre;
 use Cinema\Movie;
+use Session;
+use Redirect;
+use Illuminate\Routing\Route;
+
 class MovieController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware('admin');
+    }
+    public function find(Route $route){
+        $this->movie = Movie::find($route->getParameter('pelicula'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +48,8 @@ class MovieController extends Controller
     public function store(Request $request)
     {
         Movie::create($request->all());
-        return "Listo";
+        Session::flash('message','Pelicula Creada Correctamente');
+        return Redirect::to('/pelicula');
     }
     /**
      * Display the specified resource.
@@ -56,7 +69,9 @@ class MovieController extends Controller
      */
     public function edit($id)
     {
-        //
+        $movie = Movie::find($id);
+        $genres = Genre::lists('genre', 'id');
+        return view('pelicula.edit',['movie'=>$movie,'genres'=>$genres]);
     }
     /**
      * Update the specified resource in storage.
@@ -67,7 +82,14 @@ class MovieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //$this->movie->fill($request->all());
+        //$this->movie->save();
+        $movie = Movie::find($id);
+        $movie->fill($request->all());
+        $movie->save();
+
+        Session::flash('message','Pelicula Editada Correctamente');
+        return Redirect::to('/pelicula');
     }
     /**
      * Remove the specified resource from storage.
@@ -77,6 +99,15 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // $this->movie->delete();
+        // \Storage::delete($this->movie->path);
+        Movie::destroy($id);
+        $movie = Movie::find($id);
+
+        //faltaaaaaaaaaaaaaaaaaaaaa no he podido borrar los archivos solo el registro de la base de datos
+        //\Storage::delete($this->movie->path);
+
+        Session::flash('message','Pelicula Eliminada Correctamente');
+        return Redirect::to('/pelicula');
     }
 }

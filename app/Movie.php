@@ -1,29 +1,23 @@
 <?php
-
 namespace Cinema;
-
 use Illuminate\Database\Eloquent\Model;
-
 use Carbon\Carbon;
-
 use DB;
-
 class Movie extends Model
 {
     protected $table = "movies";
     protected $fillable = ['name','path','cast','direction','duration','genre_id'];
-
-	//tiene path por q queremos modificarlo antes de guardarlo    
     public function setPathAttribute($path){
-    	$this->attributes['path'] = Carbon::now()->second.$path->getClientOriginalName();
-    	$name = Carbon::now()->second.$path->getClientOriginalName();
-    	\Storage::disk('local')->put($name, \File::get($path));
-    }
-
-    public static function Movies(){
-    	return DB::table('movies')
-    		->join('genres','genres.id','=','movies.genre_id')
-    		->select('movies.*', 'genres.genre')
-    		->get();
-    }
+    	if(! empty($path)){
+			$name = Carbon::now()->second.$path->getClientOriginalName();
+			$this->attributes['path'] = $name;
+			\Storage::disk('local')->put($name, \File::get($path));
+    	}
+	}
+	public static function Movies(){
+		return DB::table('movies')
+			->join('genres','genres.id','=','movies.genre_id')
+			->select('movies.*', 'genres.genre')
+			->get();
+	}
 }

@@ -5,7 +5,7 @@
 			<thead>
 				<th>Nombre</th>
 				<th>Genero</th>
-				<th>Direccion</th>
+				<th>Dirección</th>
 				<th>Caratula</th>
 				<th>Operaciones</th>
 			</thead>
@@ -17,7 +17,9 @@
 					<td>
 						<img src="movies/{{$movie->path}}" alt="" style="width:100px;"/>
 					</td>
-					<td>Editar</td>
+					<td>
+						{!!link_to_route('pelicula.edit', $title = 'Editar', $parameters = $movie->id, $attributes = ['class'=>'btn btn-primary'])!!}
+					</td>
 				</tbody>
 			@endforeach
 		</table>
