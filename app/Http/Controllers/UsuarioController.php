@@ -9,9 +9,16 @@ use Cinema\User;
 use Session;
 use Redirect;
 use Illuminate\Routing\Route;
+
 class UsuarioController extends Controller
 {
-    
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware('admin');
+    }
+    public function find(Route $route){
+        $this->user = User::find($route->getParameter('usuario'));
+    }
     /**
      * Display a listing of the resource.
      *
@@ -64,7 +71,9 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        return view('usuario.edit',['user'=>$this->user]);
+        $user = User::find($id);
+        return view('usuario.edit',['user'=>$user]);
+        //return view('usuario.edit',['user'=>$this->user]);
     }
     /**
      * Update the specified resource in storage.
@@ -75,8 +84,12 @@ class UsuarioController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $this->user->fill($request->all());
-        $this->user->save();
+        //$this->user->fill($request->all());
+        //$this->user->save();
+
+        $user = User::find($id);
+        $user->fill($request->all());
+        $user->save();
         Session::flash('message','Usuario Actualizado Correctamente');
         return Redirect::to('/usuario');
     }

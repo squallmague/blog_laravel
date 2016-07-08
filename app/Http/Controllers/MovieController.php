@@ -14,7 +14,8 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+        $movies = Movie::Movies();
+        return view('pelicula.index', compact('movies'));
     }
     /**
      * Show the form for creating a new resource.
