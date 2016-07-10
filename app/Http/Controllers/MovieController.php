@@ -101,6 +101,7 @@ class MovieController extends Controller
     {
         // $this->movie->delete();
         // \Storage::delete($this->movie->path);
+        
         Movie::destroy($id);
         $movie = Movie::find($id);
 
