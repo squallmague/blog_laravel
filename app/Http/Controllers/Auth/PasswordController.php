@@ -4,9 +4,17 @@ namespace Cinema\Http\Controllers\Auth;
 
 use Cinema\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Auth;
 
 class PasswordController extends Controller
 {
+    //protected $redirectTo = '/password/reset';
+    protected $redirectTo = '/admin';
+    protected function resetPassword($user, $password){
+        $user->password = $password;
+        $user->save();
+        Auth::login($user);
+    }
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller

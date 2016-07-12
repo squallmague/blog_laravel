@@ -33,6 +33,7 @@
 					</div>
 					{!!Form::submit('Iniciar',['class'=>'btn btn-primary'])!!}
 				{!!Form::close()!!}
+				{!!link_to('password/reset', $title = 'Olvidaste tu Contraseña?', $attributes = null, $secure = null)!!}
 			</div>
 		</div>
 		<div class="review-slider">
